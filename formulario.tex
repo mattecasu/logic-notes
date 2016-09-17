@@ -1,0 +1,1498 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[latin1]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx,color}
+\usepackage{proof}
+\usepackage{float}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{diagrams}
+\usepackage{bsymb}
+\usepackage{mathrsfs}
+%NOTA: hyperref deve essere l'ultimo!
+\usepackage[pdftex]{hyperref}
+\hypersetup{colorlinks=false}
+
+\title{Formulario di logica}
+\author{MC}
+\date{}
+%\institute{Epi Lab}
+
+\newarrow{Corresponds} <--->
+
+\begin{document}
+\frenchspacing
+\newcommand{\set}[2]{\{#1 \,|\,#2\}}
+\maketitle
+\begin{flushright}
+\emph{
+Nothing is more fecund than a mistake, provided one gets out of it.
+}
+\end{flushright}
+
+\section{Vuoto, universo, singoletto}
+\subsubsection*{Universo}
+\[\mathbb{U} \triangleq \set{x}{x=x}\]
+
+\subsubsection*{Vuoto}
+\[\varnothing \triangleq \set{x}{x \neq x}\]
+
+\subsubsection*{Singoletto}
+\[\{a\} \triangleq \set{x}{x=a}\]
+
+\subsubsection*{Definizione degli ordinali}
+\[
+\left\{
+\begin{array}{rcl}
+0 &=& \emptyset\\
+n+1 &=& n \cup \{n\}\\
+\end{array}
+\right.
+\]
+
+\section{Coppie ordinate}
+
+Una definizione adeguata di coppia ordinata deve permettere di dimostrare il
+seguente principio:
+\[(x,y)=(z,u) \mbox{ sse } x=z \wedge y=u\]
+Una definizione adeguata nel caso degli insiemi è dovuta a Kuratowsky:
+\[(x,y) \triangleq \{\{x\}, \{x,y\}\}\]
+che permette di definire le proiezioni.\\
+Nota: è incluso il caso particolare della coppia $(x,x)=\{x,\{x,x\}\}=
+\{\{x\}\}$.
+
+\section{Relazioni}
+
+Se $A$ e $B$ sono insiemi, una relazione $R \subseteq A \times B$ è un insieme
+di coppie, le cui prime componenti formano il \emph{dominio} della relazione, e
+le seconde componenti il \emph{rango}.\\
+Usiamo la notazione $R:A \pfun B$.
+
+\subsubsection*{Relazione (funzione) identica}
+Sia $S$ un insieme. Allora\\
+$Id_S\stackrel{\Delta}{=}\set{(x,x')}{x \in S \wedge x=x'}$
+
+\subsubsection*{Relazione inversa}
+$R° \stackrel{\Delta}{=} \set{(y,x)}{(x,y) \in R}$
+
+\subsubsection*{Composizione}
+Date R e S relazioni tali che $ran(R) \cap dom(S) \neq \varnothing$:
+\[R\,;S\stackrel{\Delta}{=}\set{(x,y)}{\exists z.R(x,z) \wedge S(z,y)}\]
+A volte si trova $R \circ S$, $RS$ o $S \circ R$.
+
+\subsubsection*{Residui}
+
+\[S/R=\set{(x,y)}{\forall z.(y,z) \in R \to (x,z) \in S}\]
+\[S\backslash R = \set{(x,y)}{\forall z.(z,x) \in R \to (z,y) \in S}\]
+
+\subsubsection*{Spazio}
+Una relazione $R:A \pfun B$ è un elemento di $2^{A \times B}$ (o se vogliamo, un
+sottoinsieme di $A \times B$, o una funzione da A in $2^B$).
+
+\subsubsection*{Chiusure}
+
+Data una relazione R su un insieme A, definiamo:
+\begin{itemize}
+\item l'$n$-esima \emph{potenza} (l'$n$-esima composizione di $R$ con se
+stessa):
+\[ R^n \stackrel{\Delta}{=} \left \{
+\begin{array}{lcl}
+Id_A & \mbox{ se } & n=0\\
+R^{n-1} \circ R & \mbox{ se } & n>0
+\end{array}
+\right.\]
+\item la chiusura transitiva di R:
+$$R^+\stackrel{\Delta}{=}\bigcup_{n \ge 1} R^n$$\\
+(la più piccola relazione transitiva su A contenente R)
+\item la chiusura riflessiva-transitiva di R:
+$$R^*\stackrel{\Delta}{=}\bigcup_{n \ge 0}R^n$$
+\end{itemize}
+\textbf{Nota}:
+\begin{description}
+\item[-] $R^+=R \circ R^*$
+\item[-] $R^*=Id_A \cup R^+$
+\item[-] $(R \cup R^{-1})^*$ è la più piccola relazione di equivalenza su A
+contenente R.
+\end{description}
+
+\subsubsection*{Proprietà relazioni}
+Sia $R$ relazione di tipo $R:A \pfun B$ su un universo $U$. Allora:
+\begin{itemize}
+\item R è riflessiva sse $Id_U \subseteq R$
+\item R è transitiva sse $R;R \subseteq R$
+\item R è simmetrica sse $R° \subseteq R$
+\item R è interpolativa (densa) sse $R \subseteq R;R$
+\item R è antisimmetrica sse $R \cap R° \subseteq Id_U$
+\item R è funzionale sse $R°\,;R \subseteq Id_B$
+\item R è totale sse $Id_A \subseteq R\,;R°$
+\item R è iniettiva sse $R°$ è funzionale sse $R;R° \subseteq Id_A$
+\item R è suriettiva sse $R°$ è totale sse $id_B \subseteq R°;R$
+\item R è biettiva sse $R\,; R°=Id_A$ e $R°=Id_B$
+\end{itemize}
+
+
+\section{Logica modale}
+
+Per ogni proprietà, $R$ soddisfa la proprietà in un frame $F=(W,R)$ sse
+l'assioma corrispondente è valido per $F$.\\
+Inseriamo anche la proprietà di connessione debole: $\forall x,y,z (Rxy
+\wedge Rxz \to Ryz \vee y=z \vee Rzy)$, di cui l'assioma modale è L: $\Box (A
+\wedge \Box A \to B) \vee \Box (B \wedge \Box B \to A)$.\\
+La logica modale proposizionale non è equivalente a FOL:
+\begin{itemize}
+\item ci sono classi di frames non definibili al primo ordine: e.g. quelli che
+rendono valido l'assioma M (di McKinsey) $\Box \Diamond A \to \Diamond \Box A$
+\item ci sono proprietà elementari di $R$ non catturabili da alcun assioma
+modale (e.g. la proprietà irriflessiva)
+\end{itemize}
+Una logica modale $\Delta$ è detta {\it normale} se:
+\begin{itemize}
+\item contiene lo schema:
+\[K: \Box (A \to B) \to (\Box A \to \Box B)\]
+\item ed è chiusa sotto necessitazione:
+\[\infer[(Nec)]{\Box A}{A}\]
+\end{itemize}
+{\bf Teorema}: se in una logica normale vale $\Diamond A \to \Box A$, allora
+$\Box$ commuta con $\vee$ e con $\to$.\\
+{\bf Teorema (Scott-Lemmon)}: sia $\phi$ una formula positiva\footnote{ Una
+formula $\phi$ è {\it positiva} se è atomica o se è costruita con i soli
+connettivi $\wedge$, $\vee$, $\Box$, $\Diamond$.}. Allora lo schema di assiomi:
+\[\Diamond^h \Box^i \phi \to \Box^j \Diamond^k \phi\]
+è valido in tutti e soli i frames con R:
+\[R^hwv \wedge R^jvu \to \exists x.R^ivx \wedge R^kux\]
+dove $\Box^n$ denota $n$ boxes, mentre $R^n$ denota la composizione $n$-esima di
+$R$.
+
+\subsubsection*{Teoria della corrispondenza}
+
+Se $R$ è una relazione binaria, le proprietà più importanti di cui può godere
+sono:
+\begin{center}
+\begin{tabular}{|lllr|}
+\hline
+{\bf R} & {\bf FOL} & {\bf Assioma} &\\
+\hline \hline
+{\bf riflessiva} & $\forall x (Rxx)$ & $\Box A \to A$ & (T)\\
+{\bf irriflessiva} & $\forall x (\neg Rxx)$ & non rappr. & \\
+{\bf simmetrica} & $\forall xy(Rxy \to Ryx)$ & $A \to \Box \Diamond A$ & (B)\\
+{\bf asimmetrica} & $\forall xy(Rxy \to \neg Ryx)$ & non rappr. &\\
+{\bf antisimmetrica} & $\forall xy (Rxy \wedge Ryx \to x=y)$ & non rappr. &\\
+{\bf transitiva} & $\forall xyz (Rxy \wedge Ryz \to Rxz)$ & $\Box A \to \Box \Box A$ & (4)\\
+{\bf intransitiva} & $\forall xyz (Rxy \wedge Ryz \to \neg Rxz)$ & & \\
+{\bf lineare} & $\forall xy (Rxy \vee Ryx \vee x=y)$ & & \\
+{\bf seriale} & $\forall x \exists y (Rxy)$ & $\Box A \to \Diamond A$ & (D)\\
+{\bf funzionale} & $\forall x \exists ! y (Rxy)$ & $\Diamond A \to \Box A$& \\
+{\bf funz. parziale} & $\forall x \exists !! y.(Rxy)$ & $\Diamond A \to \Box A$ &\\
+{\bf euclidea} & $\forall xyz (Rxy \wedge Rxz \to Ryz)$ & $\Diamond A \to \Box \Diamond A$ & (5)\\
+{\bf debolmente densa} & $\forall x \forall y (Rxy \to \exists z (Rxz \wedge Rzy))$ & $\Box \Box A \to \Box A$ & \\
+{\bf debolmente diretta} & $\forall xyz(Rxy \wedge Rxz \to \exists w(Ryw \wedge Rzw))$ & $\Diamond \Box A \to \Box \Diamond A$ &\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Barcan-formula}
+
+La formula di Barcan:
+\[\forall x (\Box Fx) \to \Box \forall x(Fx)\]
+è valida in strutture di Kripke con dominio anti-monotòno.
+
+La conversa:
+\[\Box \forall x(Fx) \to \forall x(\Box Fx)\]
+è valida in strutture con dominio monotòno.
+
+In strutture di dominio costante le due formule sono entrambe valide.\\
+In strutture con dominio relativo nessuna delle due è valida in generale.
+
+Il dominio costante tra mondi corrisponde alla prospettiva {\it possibilista},
+secondo la quale i quantificatori variano su tutti gli individui, compresi i
+possibili. Questo è adeguato quando si vuole quantificare su concetti
+individuali.
+
+Una controindicazione è che se si vuole distinguere tra oggetti attuali e non
+attuali si è costretti a usare un qualche predicato di esistenza o le logiche
+libere.
+
+Il dominio relativo cattura (forse) meglio le nostre intuizioni modali. Nei
+sistemi a dominio relativo spesso si definisce un predicato di esistenza:
+\[E! x \triangleq \exists y.(y=x)\]
+In tali sistemi, vale:
+\[\Box\forall x.E! x\]
+(necessariamente ogni cosa esiste), ma non:
+\[\forall x.\Box E! x\]
+(la Necessary Existence: ogni cosa esiste necessariamente).\\
+Un problema del dominio relativo (che corrisponde alla prospettiva {\it
+attualista}) è però di dover assumere limitazioni, come la chiusura universale
+di tutte le formule e il non uso delle costanti.
+
+\paragraph*{Proprietà valide con dominio costante}
+
+\begin{itemize}
+\item $\forall x.\Box \exists y(y=x)$ (Necessary Existence)
+\item Barcan Formula
+\item Converse Barcan Formula
+\end{itemize}
+L'attualista non può accettare questi principi, perché vorrebbe oggetti
+contingenti, ossia $x$ tali che: $\Diamond E! x \wedge \Diamond \neg E! x$. Ma
+necessitando NE si ha $\Box \forall x.\Box E! x$, che implica che non ci sono
+oggetti contingenti.\\
+Ora, CBF implica il Serious Actualism:
+\[\Box(P(x) \to \exists y.x=y)\]
+che è accettato dall'attualista. Ma da CBF e SA si deriva NE.
+
+Nel sistema di Kripke 1963 i domini sono relativi ai mondi, BF, CBF e NE non
+sono valide (i domini possono essere vuoti). Per bloccare la derivazione di
+BF, CBF e NE Kripke assume l'interpretazione di generalità delle variabili
+libere, ed è costretto a non usare costanti. Nec è derivabile, mentre Gen è
+inutile. Nel sistema non si possono provare modalità {\it de re}, come $\forall
+x.\Box(P(x) \to P(x))$, che però grazie Nec e all'interpretazione di generalità
+sono assunte come assiomi. 
+
+
+
+
+\section{Funzioni}
+
+Dati due insiemi A e B, $f:A \rightarrow B$ sse
+\begin{description}
+\item[(i)] $f \subseteq A \times B$
+\item[(ii)] $\forall a \in A.\exists ! b \in B.(a,b) \in f$
+\end{description}
+{\bf Nota}: $A$ e $B$ sono detti \emph{dominio} e \emph{codominio} della
+funzione. Qui trattiamo le funzioni come particolari relazioni, ma in questo
+modo trattiamo solo la parte estensionale della nozione di funzione. La
+nozione di codominio ad esempio non può essere caratterizzata dal grafo della
+funzione.
+
+\subsubsection*{Funzioni parziali}
+Dati due insiemi A e B, $f:A \rightharpoonup B$ sse
+\begin{description}
+\item[(i)] $f \subseteq A \times B$
+\item[(ii)] $\forall a \in A.\exists !! b \in B.(a,b) \in f$
+\end{description}
+\ \\
+\textbf{Nota}: sotto l'ipotesi che $f:A \rightarrow B$, $a \in A$ e $P(x)$ sia
+una proprietà, le due affermazioni
+\begin{itemize}
+\item $\exists b \in B ((a,b) \in f \wedge P(b))$
+\item $\forall b \in B ((a,b) \in f \Rightarrow P(b))$
+\end{itemize}
+sono equivalenti, ed esprimono $P(f(a))$.
+
+\subsubsection*{Grafo di una funzione}
+Data $f:A \rightarrow B$, il grafo di $f$ (la sua applicazione) è l'insieme\\
+$\hat{f} = \set{(x,y)}{(x,y) \in f}$
+
+Per le funzioni, come per gli insiemi, vale un {\it principio di
+estensionalità}: date $f,g:A \to B$, se per ogni $a \in A$ si ha $f(a)=g(a)$,
+allora $f=g$.
+
+
+\subsubsection*{Immagine, controimmagine, immagine diretta}
+
+Siano $f:A \rightarrow B$, $C \subseteq A$, $D \subseteq B$. Definiamo tre
+operatori\footnote{ Gli operatori {\it immagine} e {\it immagine diretta} hanno
+tipo $\mathbb{P}(A) \to \mathbb{P}(B)$, l'operatore di {\it controimmagine} ha
+tipo $\mathbb{P}(B) \to \mathbb{P}(A)$.}:
+\begin{itemize}
+\item {\bf immagine} (di $C$ lungo $f$)
+\[ f_!(C) \stackrel{\Delta}{=}
+\set{y \in B}{\exists x \in C . f(x)=y}  \] 
+\item {\bf controimmagine}
+\[ f^*(D)\stackrel{\Delta}{=}
+\set{x \in A}{f(x) \in D} \]
+\item {\bf immagine diretta}
+\[ f_*(C) \stackrel{\Delta}{=}
+\set{y \in B}{\forall x \in A.f(x)=y \Rightarrow x \in C} \]
+\end{itemize}
+
+\subsubsection*{Aggiunzioni}
+
+Sotto le ipotesi precedenti,
+\[ f_!(C) \subseteq D \mbox{ sse } C \subseteq f^*(D) \]
+e
+\[ f^*(C) \subseteq D \mbox{ sse } C \subseteq f_*(D) \]
+Per cui vale
+\[f_! \dashv f^* \dashv f_*\]
+
+\subsubsection*{Spazio}
+Lo spazio delle funzioni da A in B è notato con $B^A$, e la sua cardinalità è
+$|B|^{|A|}$.
+
+\subsubsection*{Matrici}
+Una matrice $A \times B$ a valori in $C$ è una funzione di tipo $A \times B \to
+C$, cioè un elemento di $C^{A \times B}$.\\
+Nel caso particolare che $C=Bool$ si avrà una matrice elemento di
+$2^{A \times B}$, cioè una relazione da $A$ a $B$.
+
+\subsubsection*{Kernel e proiezione}
+
+Data $f:X \to S$ si definisce il {\it kernel} (o {\it nucleo di equivalenza})
+di $f$:
+\[E_f \triangleq \set{(x,y) \in X \times X}{f(x)=f(y)}\]
+Inoltre, data una relazione di equivalenza $E$ su un insieme $X$ si definisce
+una funzione di proiezione $p:X \to X/_E$, che assegna a ogni $x \in X$ la sua
+classe di equivalenza.
+
+Ogni funzione $f:X \to S$ può essere scritta come composizione $g \circ p$:
+\[X \stackrel{p}{\to} X/_{E_f} \stackrel{g}{\rightarrowtail} S\]
+dove $p$ è la proiezione di ogni elemento di $X$ verso il quoziente $X/_{E_f}$,
+e $g$ è iniettiva.
+
+\section{Proprietà dell'esponenziazione}
+
+Questi isomorfismi sono in effetti trasformazioni naturali.
+Il prodotto e l'oggetto terminale danno:
+\[ {(C^B)}^A \simeq C^{(A \times B)} \]
+\[ A^{\bf 1} \simeq A \]
+\[ {(A \times B)}^C \simeq A^C \times B^C \]
+
+La somma e l'oggetto iniziale danno:
+\[ C^{A+B} \simeq C^A \times C^B \]
+\[ C^{\bf 0} \simeq {\bf 1} \]
+\[ A \times (B + C) \simeq A \times B + A \times C \]
+\[ A \times {\bf 0} \simeq {\bf 0} \]
+
+
+\[ \mathbb{P}(X) \simeq {Bool}^X \]
+\[ X^{\bf 1} \simeq X \]
+\[ {\bf 1}^X \simeq {\bf 1} \]
+\[ X^{\bf 0} \simeq {\bf 1} \]
+\[ {\bf 0}^X \simeq {\bf 0} \]
+
+
+
+\section{Aggiunzioni}
+
+\begin{table}[H]
+\renewcommand\arraystretch{2.8}
+\begin{tabular}{|c|c|c|}
+\hline
+{\bf Logica} & {\bf Insiemi} & {\bf Funzioni}\\
+\hline
+$\infer={C \models A \wedge B}{C \models A & C \models B}$ &
+$\infer={C \subseteq A \cap B}{C \subseteq A & C \subseteq B}$  &
+$\infer={C \rightarrow A \times B}{C \rightarrow A & C \rightarrow B}$\\
+\hline
+$\infer={A \vee B \models C}{A \models C & B \models C}$ & $\infer={A \cup B
+\subseteq C}{A \subseteq C & B \subseteq C}$ & $\infer={A \uplus B \rightarrow
+C}{A \rightarrow C & B \rightarrow C}$\\
+\hline
+$\infer={C \models A \Rightarrow B}{A \wedge C \models B}$ & $\infer={C
+\subseteq (S \backslash A) \cup B}{A \cap C \subseteq B & C \subseteq S}$ &
+$\infer={C \rightarrow B^A}{A \times C \rightarrow B}$\\
+\hline
+$\infer={\mbox{sempre}}{\bot \models C}$ &
+$\infer={\mbox{sempre}}{\varnothing \subseteq C}$ &
+$\infer={\mbox{sempre}}{\varnothing \rightarrow C}$\\
+\hline
+$\infer={\mbox{sempre}}{C \models \top}$ & $\infer={\mbox{sempre}}{C \subseteq S}$ &
+$\infer={\mbox{sempre}}{C \rightarrow \{0\} }$\\
+\hline
+\end{tabular}
+\end{table}
+Con $A \uplus B$, o anche $A + B$, intendiamo l'unione disgiunta:
+\[ A \uplus B \stackrel{\Delta}{=} A \times \{0\} \cup B \times \{1\} \]
+
+
+\section{Interazione quantificatori-connettivi}
+
+\subsubsection*{Movimento}
+\begin{eqnarray*}
+\forall x (Ax \to B) & \equiv & \exists x Ax \to B\\
+\exists x (Ax \to B) & \equiv & \forall x Ax \to B\\
+\forall x (A \to Bx) & \equiv & A \to \forall x Bx\\
+\exists x (A \to Bx) & \equiv & A \to \exists x Bx\\
+\forall x (Ax \to Bx) & \models & \forall x.Ax \to \forall x.Bx\\
+A \wedge \forall x Bx & \equiv & \forall x (A \wedge Bx)\\
+A \wedge \exists x Bx & \equiv  & \exists x (A \wedge Bx)\\
+A \vee \forall x Bx & \equiv & \forall x (A \vee Bx)\\
+A \vee \exists x Bx & \equiv & \exists x (A \vee Bx)
+\end{eqnarray*}
+
+\subsubsection*{Distribuzione}
+
+\`E semplice: $\forall$ commuta con $\wedge$, $\exists$ con $\vee$.\\
+$\forall$ raccoglie su $\vee$ (e non distribuisce).\\
+$\exists$ distribuisce su $\wedge$ (e non raccoglie).
+
+\subsubsection*{Dipendenza quantificatori}
+$\exists x \forall y (Axy) \models \forall y \exists x (Axy)$\\
+ma non viceversa.
+
+
+\section{Logica intuizionista}
+
+Consideriamo il calcolo proposizionale intuizionista (IPC). Essendo sottoposto
+all'interpretazione BHK, esso è restrittivo su disgiunzione, negazione ed
+esistenziale. Ne segue che nessun connettivo è definibile in termini di altri.
+In IPC falliscono ad esempio i seguenti teoremi classici:
+\begin{itemize}
+\item $A \vee \neg A$
+\item $(A \to B) \to (\neg A \vee B)$
+\item $(A \to B \vee C) \to (A \to B) \vee (A \to C)$
+\item $((A \to B) \to B) \to (A \vee B)$
+\end{itemize}
+E ancora {\it non} sono valide:
+\begin{itemize}
+\item DeMorgan: $\neg (A \wedge B) \to (\neg A \vee \neg B)$
+\item contrapposizione: $(\neg A \to \neg B) \to (B \to A)$
+\item la legge di Peirce: $((A \to B) \to A) \to A$
+\item interdefinibilità: $\neg \forall x.\phi \to \exists x.\neg \phi$
+\item doppia negazione: $\forall x.\neg \neg \phi(x) \to \neg \neg
+\forall x.\phi(x)$\footnote{ Mentre non ci sono problemi con $\wedge$ e $\to$:
+la doppia negazione commuta con essi.}
+\end{itemize}
+
+Il calcolo intuizionista gode della proprietà della disgiunzione:
+\[\mbox{se }\vdash_{IPC} (A \vee B) \mbox{ allora } \vdash_{IPC} A \mbox{ oppure }
+\vdash_{IPC} B\]
+La logica classica non ne gode: un esempio è $A \vee \neg A$.\\
+{\bf Nota}: consideriamo la CWA. Essa in generale non preserva la consistenza,
+infatti assumiamo di avere un database $\Delta=\{\alpha \vee \beta\}$. Allora
+$\Delta \vdash \alpha \vee \beta$. Siccome né $\alpha$ né $\beta$ sono
+conseguenze di $\Delta$, applicando CWA avremo $\Delta \models \neg \alpha
+\wedge \neg \beta \wedge (\alpha \vee \beta)$. Questa è una contraddizione.\\
+E infatti CWA($\Delta$) preserva la consistenza di $\Delta$ sse $\Delta$ ha
+modello minimo.\\
+\`E come dire che la logica intuizionista opera su ``modelli minimi''?
+
+\paragraph{Teorema di Glivenko}
+\[\vdash_{CPC} \phi \mbox{ sse } \vdash_{IPC} \neg \neg \phi\]
+{\bf Nota}: il risultato non si estende al caso predicativo.
+
+
+\paragraph{La traduzione di G\"{o}del}\ \\
+Analogo risultato è la traduzione di G\"{o}del (1932), che mappa la logica
+classica nella logica intuizionista negando doppiamente atomi, disgiunzioni ed
+esistenziali\footnote{ Anche
+per questo motivo è fuorviante dire che la logica intuizionista è un
+indebolimento della logica classica. Lo è per un aspetto, ma ne è arricchimento
+sotto altri aspetti.}. G\"{o}del ha anche fornito un mapping con S4.
+\[\vdash_{CPC} \phi \mbox{ sse } \vdash_{IPC} \phi^{\neg \neg}\]
+e
+\[\vdash_{IPC} \phi \mbox{ sse } \vdash_{S4} \phi^\Box\]
+Col senno di poi, il mapping con S4 non è una sorpresa: data una struttura di
+Kripke riflessiva e transitiva, si possono interdefinire un'algebra di Heyting
+e uno spazio topologico. 
+
+\paragraph{Logiche intermedie}\ \\ 
+Il calcolo intuizionista più il terzo escluso dà il calcolo classico. Ma ci
+sono logiche intermedie:
+\begin{itemize}
+\item LC (Dummett): IPC+$(A \to B) \vee (B \to A)$. Caratterizza frames
+lineari, ed è completa per quelli finiti.
+\item KC (logica del terzo escluso debole): IPC+$\neg A \vee \neg \neg A$,
+completa rispetto a frames finiti con elemento massimo
+\item (3-Peirce): IPC+$((C \to (((A \to B) \to A) \to A)) \to C) \to C$.
+Caratterizza i frames di profondità 2 ed è completa rispetto a quelli finiti
+\item IPC+$\forall x (A \vee Bx) \to A \vee \forall x.Bx$. Completa per i
+frames con dominio costante
+\end{itemize}
+
+\section{Proprietà proof-teoretiche}
+
+\paragraph{Cut-elimination theorem}\ \\
+La regola del taglio è eliminabile.\\
+Da esso:
+\begin{itemize}
+\item {\it quasi sempre} segue la subformula property
+\end{itemize}
+
+\paragraph{Subformula property}\ \\
+Ogni prova di un sequente non contiene formule che non siano già nel sequente.
+\\
+Da essa seguono:
+\begin{itemize}
+\item consistenza del sistema (l'assurdo non è derivabile)
+\item decidibilità
+\item teorema dell'interpolante di Craig
+\end{itemize}
+Per {\bf S5} vale, anche se non si ha l'eliminazione del taglio.
+
+\paragraph{Disjunction property}\ \\
+La logica intuizionista gode della {\it disjunction property}: per ogni
+$\alpha$ e $\beta$, se $\vdash \alpha \vee \beta$, allora $\vdash \alpha$
+o $\vdash \beta$.\\
+Nella logica intuizionista, segue dall'eliminazione del taglio.
+
+{\bf Prova}: si assuma dimostrato il sequente $\Rightarrow \alpha \vee \beta$.
+L'ultima regola applicata, escludendo il taglio, sarà un'introduzione di
+$\vee$. Quindi il sequente precedente deve essere $\alpha$ o $\beta$.\\
+L'argomento non vale se si ha contrazione a destra (ad es. il caso classico).
+
+
+\section{Semantica per la logica intuizionista}
+
+
+Ci sono due modi per dare una semantica al calcolo intuizionista: le algebre
+di Heyting e le strutture di Kripke. Vediamo le prime.
+
+\subsection{Algebre di Heyting}
+
+\subsubsection{Reticoli}
+
+In teoria degli ordini, un {\it reticolo} $L=(S,\leq)$ è un ordine parziale in
+cui:
+\begin{itemize}
+\item per ogni $\{a,b\}$ con $a,b \in S$ sono definiti {\it il} massimo $a
+\vee b$ (il {\it join, o {\it least upper bound}}) e {\it il} minimo $a \wedge
+b$ (il {\it meet}, o {\it greatest lower bound})\footnote{ Il {\it least upper
+bound} di un insieme $A \subseteq S$ è:
+  \begin{itemize}
+  \item un {\it upper bound}, ovvero un elemento $c \in S$ tale che $x \leq c$
+    per ogni $x \in A$
+  \item non esistono upper-bounds $y$ tali che $y \leq x$
+\end{itemize} }
+\item assumiamo che un reticolo sia {\it limitato}\footnote{ Possiamo assumerlo
+nella definizione perché ogni reticolo non vuoto e finito può essere esteso a
+un reticolo limitato, prendendo:
+\[\top = \bigvee S = s_1 \vee \dots s_n\]
+e
+\[\bot = \bigwedge S = s_1, \cdots, s_n\] }, ossia abbia due elementi $\top$ e
+$\bot$ tali che:
+\[a \vee \bot =a \]
+e
+\[a \wedge \top = a\]
+\end{itemize}
+Avremmo potuto definire un reticolo per via algebrica, infatti $a \leq b \mbox{
+sse } a \wedge b = a$, o (equivalentemente) $a \leq b \mbox{ sse } a \vee
+b = b$. Da questo punto di vista un reticolo è una struttura
+$L=(S,\wedge, \vee)$ in cui $\wedge$ e $\vee$ sono commutative, associative e
+idempotenti, e tra loro vale l'assorbimento. Un reticolo limitato è un reticolo
+in cui si hanno le identità per entrambe le operazioni.
+{\bf Nota}: in un reticolo limitato, sono definiti il join vuoto (che è $\bot$)
+e il meet vuoto (che è $\top$). 
+
+
+\subsubsection{Residui}
+
+In generale, siano $P$ e $Q$ ordini parziali. Una mappa $f:P \to Q$ è {\it
+residuata} se esiste una mappa $g:Q \to P$ (il residuo di $f$) tale che per
+ogni $p \in P$, $q \in Q$:
+\[f(p)\leq q \mbox{ iff } p\leq g(q)\]
+Dato che, se esiste, $g$ è unica, la possiamo chiamare $f^*$. Si noti che:
+\begin{itemize}
+\item $f^*(q)=max \set{p \in P}{f(p) \leq q}$
+\item $f(p)=min \set{q \in Q}{p \leq f^*(q)}$
+\end{itemize}
+$f$ commuta con i {\it joins}, $f^*$ con i {\it meets}. $f$ e $g$ costituiscono
+una connessione di Galois.
+
+Se $P=Q$ possiamo considerare il caso specifico dei reticoli residuati,
+prendendo per ogni fissato $u \in P$ mappe da $P$ in $P$: $g_u(x)=u \cdot x$
+e $h_u(x)=x \cdot u$. I residui saranno $g_u^*(y)=u \backslash y$ e $h_u^*(y)=
+y/u$.
+
+Quindi, un semigruppo parzialmente ordinato $(P, \cdot, \leq)$ è {\it
+residuato} sse si hanno due operazioni $\backslash$ e $/$ (il residuo destro
+e sinistro di $\cdot$) tali che, per ogni $x,y,z \in P$:
+\[x \cdot y \leq z \mbox{ iff } y \leq x\backslash z \mbox{ iff } x \leq z/y\]
+Se $P$ è un reticolo e $(P, \cdot)$ ha unità si ha un {\it reticolo
+residuato}\footnote{ In generale si distinguono $\cdot$, l'operazione del
+monoide, e $\wedge$, la congiunzione reticolare, così come $1$, l'unità
+monoidale, e $\top$, l'elemento top del reticolo.}. In ogni reticolo
+residuato valgono:
+\begin{itemize}
+\item $(x \vee y)\backslash z=(x \backslash z) \wedge (y \backslash z)$
+\item $z/ (x \vee y) (z/x) \wedge (z/y)$
+\item $z \backslash (x \wedge y) = (z \backslash x) \wedge (z \backslash y)$
+\item $(x \wedge y)/z = (x / z) \wedge (y/z)$
+\item $x \backslash z=max\set{y}{x \cdot y \leq z}$
+\item $z / y=min \set{x}{x \cdot y \leq z}$
+\end{itemize}
+
+
+Se $\cdot$ è commutativa, allora $a\backslash b=b /a$. In questi casi si usa
+un solo simbolo, $a \to b$.
+
+\subsubsection{Algebre di Heyting}
+
+In ogni reticolo vale una distributività debole, ossia:
+\[x \wedge (y \vee z) \geq (x \wedge y) \vee (x \wedge z)\]
+\[x \vee (y \wedge z) \leq (x \vee y) \wedge (x \vee z)\]
+Se valgono le uguaglianze (che peraltro si implicano a vicenda), il reticolo è
+{\it distributivo}.
+
+Un'{\it algebra di Heyting} è un reticolo distributivo $L=(S,\leq)$ con
+minimo $\bot$, in cui per ogni $a,b \in S$ esiste un elemento $a \to b$ tale
+che $\to$ è residuo di $\wedge$, ossia:
+\[a \wedge c \leq b \mbox{ sse } c \leq a \to b\]
+per ogni $c \in S$.\\
+In un'algebra di Heyting si definiscono $\neg a \triangleq a \to \bot$ (lo
+pseudo-complemento di $a$ relativo a $\bot$) e $\top \triangleq \bot \to \bot$.
+
+Si dimostra che:
+\[a \to b = \bigvee \set{c \in S}{a \wedge c \leq b}\]
+
+Un'{\it algebra di Boole} è un'algebra di Heyting in cui per ogni $a,b \in S$:
+\[a \to b = \neg a \vee b\]
+o (equivalentemente) in cui:
+\[a \vee \neg a = \top\]
+oppure in cui:
+\[ \neg \neg a = a \]
+{\bf Nota}: nelle algebre di Boole ogni elemento $a$ ha il suo {\it complemento}
+(unico, in strutture distributive), ovvero un $b$ tale che:
+\[a \vee b = \top\]
+e
+\[a \wedge b = \bot\]
+Come già visto, le algebre di Heyting hanno una nozione più debole, lo {\it
+pseudocomplemento}, ossia il più grande $y$ tale che $x \wedge y = \bot$.
+
+\subsubsection{Filtri e ideali}
+
+Dato un poset $L$, un sottoinsieme non vuoto $D \subseteq L$ è {\it diretto}
+se, per ogni $x,y \in D$, esiste $z \in D$ t.c. $x \leq z$ e $y \leq z$.
+
+Una funzione tra posets $f:P \to Q$ preserva joins diretti se esiste:
+\[\bigvee f(S)=\bigvee \set{f(s)}{s \in S} \mbox{ e }
+f(\bigvee(S)=\bigvee f(S))\]
+per ogni poset diretto $S \subseteq P$ tale che abbia $\bigvee(S)$.\\
+Analogo per la preservazione dei meets diretti.\\
+La preservazione di joins (o meets) diretti implica la monotonìa per $f$.
+
+$f$ è detta {\it Scott-continua} se preserva joins diretti.
+
+Dato un insieme $X$, definiamo:
+\[\downarrow X \triangleq \set{y}{\exists x \in X.(y \leq x)}\]
+e chiamiamo {\it lower sets} quegli insiemi $X$ t.c. $X=\downarrow X$. La
+nozione di {\it upper set} è definita dualmente.\\
+Di particolare interesse sono i casi in cui l'insieme interessato è un
+singoletto $\{x\}$, denotati $\downarrow x$.
+
+Dato un poset $P$, un {\bf ideale} $I \subseteq P$ è un lower set diretto.\\
+{\bf Nota}:
+\begin{itemize}
+\item i lower sets $x \downarrow$ sono sempre ideali, e sono detti gli
+{\it ideali principali} generati dall'elemento $x$
+\item il vuoto non è mai un ideale (perché non è diretto per definizione di
+``diretto'')
+\end{itemize}
+La nozione di {\it filtro} è duale a quella di {\it ideale}.
+
+La {\it ideal completion} di un poset $P$ è il poset di tutti gli ideali
+di $P$ ordinati per inclusione. Grazie a questa costruzione, dato un
+semireticolo superiore si può costruire un reticolo completo.
+
+\section{Valori di verità}
+
+Chiamiamo $\Omega$ l'insieme dei valori di verità. Le costanti $\top$ e $\bot$
+sono valori di verità (rappresentati eventualmente da enunciati). $\Omega$ ha
+due elementi {\it nel senso debole}: ha due elementi
+distinti $\top$ e $\bot$ e, dato un $x \in \Omega$, $x$ non è distinto da essi
+(ma non è detto che si abbia un algoritmo per decidere se $x=\top$ o
+$x=\bot$).\\
+Consideriamo poi un insieme {\bf 2} di due elementi, {\it nel senso forte}:
+{\bf 2} ha due elementi distinti $\top$ e $\bot$ e si ha un algoritmo che
+decide, dato un elemento $x \in {\bf 2}$, se $x=\top$ o $x=\bot$. \`E l'insieme
+dei valori di verità {\it decidibili}:
+\[{\bf 2}=\set{p \in \Omega}{p \mbox{ oppure } \neg p}\]
+
+Da un punto di vista costruttivista possiamo considerare l'insieme $\Omega_C$
+dei valori di verità {\it classici}:
+\[\Omega_C=\set{p \in \Omega}{p \leftrightarrow \neg \neg p}\]
+Quindi abbiamo gli insiemi $\Omega$, $\Omega_C$, {\bf 2}, che hanno tutti e tre
+``due elementi'', ma in sensi diversi. Vale:
+\[{\bf 2} \subseteq \Omega_C \subseteq \Omega\]
+Nel caso classico si ha: ${\bf 2}=\Omega_C=\Omega$.\\
+${\bf 2}=\Omega$ significa ``possiamo calcolare valori di verità''. Questo è
+vero ad esempio nel caso proposizionale.
+
+\section{Gerarchie}
+
+{\bf Teorema}: un insieme $S$ è R.E. sse esiste un predicato decidibile $P$ t.c.
+\[x \in S \mbox{ sse } \exists y.P(x,y)\]
+{\bf Teorema}: un insieme $S$ è il complemento di un insieme RE sse esiste un
+predicato decidibile $P$ t.c.
+\[x \in S \mbox{ sse } \forall y.P(x,y)\]
+Estendendo, si ha la gerarchia aritmetica.
+
+\subsection{Gerarchia aritmetica}
+
+\`E la gerarchia dei ``gradi di indecidibilità''. Parallelamente, classifica
+le formule della logica del primo ordine.\\
+Definiamo la classe $\Sigma_n$ degli insiemi $S$ tali che esiste un predicato
+ricorsivo $P$ e una sequenza di $n$ quantificatori alternati iniziante per
+$\exists$ tale che:
+\[x \in S \mbox{ sse } \exists y_1, \dots, y_n.P(x, y_1, \dots, y_n)\]
+$\Pi_n$ si definisce in modo duale\footnote{ Con ``quantificatori'' intendiamo
+anche gruppi di quantificatori. Ad esempio, $\forall \forall \exists \exists$
+ha alternanza 2.}.
+
+Avremo che:
+\begin{itemize}
+\item $\Sigma_0 = \Pi_0 = R$ (proprietà decidibili)
+\item $\Sigma_1 = RE$ (Girard chiama le proprietà definite da queste formule
+{\it espansive}, ad esempio la derivabilità nell'aritmetica o al
+primo ordine)
+\item $\Pi_1 = \overline{RE}$ (Girard chiama le proprietà definite da queste
+formule {\it recessive}, ad esempio la consistenza dell'aritmetica, che
+equivale alla non derivabilità dell'assurdo)
+\end{itemize}
+In generale un insieme $\Sigma_n$ è il complemento di un insieme $\Pi_n$ e
+viceversa. Ad es:
+\begin{itemize}
+\item $K \in \Sigma_1$ e $K \in RE$
+\item $\overline{K} \in \Pi_1$ e $\overline{K} \not \in RE$
+\item $T \in \Pi_2$
+\item $\overline{T} \in \Sigma_2$
+\end{itemize}
+{\bf Nota}:
+\begin{itemize}
+\item in alcune trattazioni si indica anche un apice su $\Sigma_n$ e
+$\Pi_n$. L'apice indica l'ordine di quantificazione. Nel caso della gerarchia
+aritmetica si quantifica su numeri, quindi l'ordine è 0, e scriveremmo
+$\Sigma_n^0$ e $\Pi_n^0$. Nel caso di quantificazione su funzioni di tipo
+$\mathbb{N} \to \mathbb{N}$ l'ordine è 1, e quindi avremmo $\Sigma_n^1$ e
+$\Pi_n^1$ come nella gerarchia proiettiva (quantificazione su numeri e
+insiemi, corrisponde al caso della logica del secondo ordine: quantificazione
+su individui e proprietà)
+\item \begin{enumerate}
+  \item $\forall i (\Sigma_i \subset \Sigma_{i+1})$ e $\forall i(\Pi_i \subset
+\Pi_{i+1})$
+\item $\forall i(\Sigma_i \cup \Pi_i \subset \Sigma_{i+1} \cap \Sigma_{i+1})$
+  \end{enumerate}
+\item una formula $\phi$ con solo quantificatori vincolati (del tipo $\exists
+x\!<t$ o $\forall x\!<t$) è considerata in $\Sigma_0 = \Pi_0$.
+\end{itemize}
+
+\subsection{Algoritmo Tarski-Kuratowski}
+
+L'algoritmo di Tarski-Kuratowski per la gerarchia aritmetica: data una formula
+$\phi$
+\begin{enumerate}
+\item converti la formula in forma normale prenessa
+\item se la formula è senza quantificatori, allora è in $\Sigma_0^0=\Pi_0^0$
+\item altrimenti, conta il numero $k$ di alternanze di quantificatori
+\item se il primo quantificatore è $\exists$, la formula è in $\Sigma_{k+1}^0$
+\item se il primo quantificatore è $\forall$, la formula è in $\Pi_{k+1}^0$
+\end{enumerate}
+
+\subsection{Gerarchia analitica}
+
+Estensione higher-type della gerarchia aritmetica.\\
+$\Sigma_0^1 = \Pi_0^1 = \Delta_0^1$ è la classe delle formule del linguaggio
+dell'aritmetica del II ordine senza quantificatori per insiemi. In questo
+linguaggio non ci sono parametri per insiemi, e il fatto che usiamo questo
+linguaggio è mostrato dal font lightface dei simboli.
+
+Ogni simbolo
+{\bf boldface} corrispondente indica invece la classe corrispondente del
+linguaggio esteso con parametri per i reali (la {\it gerarchia proiettiva}).
+Una formula dell'aritmetica del II ordine è definita $\Sigma_{n+1}^1$ se è
+(logicamente equivalente a) una formula della forma:
+\[\exists X_1, \dots, \exists X_k \psi\]
+dove $\psi$ è $\Pi_n^1$. Definizione analoga per $\Pi_{n+1}^1$.\\
+Un insieme di numeri naturali è al livello $\Sigma_1^1$ della gerarchia se è
+definibile con una formula del II ordine con soli quantificatori esistenziali
+per insiemi. Analogo per $\Pi_1^1$. $n$ conta l'alternanza di quantificatori
+del II ordine.\\
+Gli insiemi {\it iperaritmetici} sono esattamente gli insiemi $\Delta_1^1
+= \Sigma_1^1 \cap \Pi_1^1$\footnote{ $\Delta_1^1$ è più grande di tutti i
+$\Sigma_n^0$ e $\Pi_n^0$.}. Un insieme iperaritmetico è l'insieme dei
+g\"{o}deliani delle formule vere dell'aritmetica.
+
+\subsection{Gerarchia logica}
+
+Conta solo l'alternanza di quantificatori del II ordine. La notazione è
+$\Sigma^n, \Pi^n$.\\
+Una formula $\exists_1^0$, ad es. $\exists n.A(n)$, è traducibile nella formula
+$\exists x(x \in \mathbb{N} \wedge A(x))$, che è $\Pi^1$, perché:
+\[x \in \mathbb{N} \iff \forall X.(X(0) \wedge \forall y.(X(y) \to X(Sy))
+\to X(x))\]
+In generale, una formula $\Pi_n^1$ è riscrivibile in una formula $\Pi^{n+1}$.
+
+\subsection{Gerarchia polinomiale}
+
+Intuitivamente caratterizza quanto una funzione decidibile sia polinomialmente
+non computabile.
+
+La gerarchia si basa sulla nozione di Turing machine con {\it oracolo}: un
+oracolo per la classe $C$ è una sotto-procedura per i problemi in $C$ che
+richiede tempo unitario.\\
+Data una classe di problemi di decisione $C$, la classe $P^C$ è la classe dei
+problemi di decisione risolubili in tempo polinomiale da una DTM che usa un
+oracolo per i problemi in $C$.
+Definiamo la gerarchia per induzione\footnote{ Ricordiamo che coNP=\{$\pi$
+problema di decisione$| \overline{\pi} \in NP$\}.}.\\
+\begin{tabular}{llcl}
+Base: & $\Delta_0^P$ & = & $\Sigma_0^P = \Pi_0^P = P$\\
+Passo: & $\Delta_{k+1}^P$ & = & $P^{\Sigma_k^P}$\\
+\ & $\Sigma_{k+1}^P$ & = &$NP^{\Sigma_k^P}$\\
+\ & $\Pi_{k+1}^P$ & = & $coNP^{\Sigma_k^P}$
+\end{tabular}\\
+{\bf Nota}:
+\begin{itemize}
+\item il primo livello è $\Delta_1^P=P$, $\Sigma_1^P=NP$, $\Pi_1^P=coNP$
+\item il secondo livello è $\Delta_2^P=P^{NP}$, $\Sigma_2^P=NP^{NP}$, $\Pi_2^P =
+\overline{NP^{NP}}$
+\item tutta la gerarchia polinomiale è contenuta nella $\Delta_1$ della
+gerarchia aritmetica, e quindi è contenuta in R
+\item si definisce la classe PRIMES=$\Sigma_1^P \cap \Pi_1^P - \Delta_1^P$
+\end{itemize}
+
+\clearpage
+
+\section{Categorie}
+
+\paragraph*{Categorie concrete:} categoria dei grafi, categoria dei monoidi, etc.
+\paragraph*{Categorie piccole:} (oggetti e frecce sono insiemi): grafi, monoidi,
+etc.
+\paragraph*{Categorie localmente piccole:} quelle categorie in cui per ogni coppia
+di oggetti $A$ e $B$, Hom(A,B) è un insieme.
+
+Ogni insieme può essere visto come una categoria piccola {\it discreta}:
+oggetti i suoi elementi e uniche frecce le identità; oppure come un funtore da
+$\mathfrak{1}$ in $Set$.
+
+Una sottocategoria {\bf D}$\subset${\bf C} è {\it full} se per ogni coppia di
+oggetti $X$ e $Y$ in {\bf D}, ogni morfismo da $X$ a $Y$ in {\bf C} è anche in
+{\it D}.
+
+\paragraph*{Isomorfismi:} una freccia $f:A \to B$ in una categoria è un {\it
+isomorfismo} se c'è una freccia $g:B \to A$ tale che $gf=1_A$ e $fg=1_B$, e si
+scrive $A \cong B$. Stessa cosa si definisce a livello dei funtori.\\
+Si definisce il prodotto tra categorie, che ha $\mathfrak{1}$ come unità ed è
+associativo e commutativo a meno di isomorfismi.
+
+Per ogni categoria $A$ esiste un funtore $U:A \to Set$ che è {\it dimenticante},
+ossia tale che dimentica la struttura. $U$ è anche {\it fedele}, nel senso che
+per ogni $f,g: A \to B$, se $U(f)=U(g)$ allora $f=g$.\\
+Per ogni categoria $A$ ci sono funtori $\Delta:A \to A\times A$ che dato un
+oggetto $a$ di $A$ produce la coppia $(a,a)$ e $\bigcirc: A \to \mathfrak{1}$
+che dato un oggetto $a$ di $A$ ritorna l'oggetto di $\mathfrak{1}$.
+
+Considerando le categorie di funtori, vale per ogni categoria $A,B,C$ che:
+\[A^\mathfrak{1} \cong A\]
+\[C^{A \times B} \cong (C^B)^A)\]
+\[(A \times B)^C \cong A^C \times B^C\]
+
+Se $A$ è una categoria localmente piccola, c'è un funtore $Hom(A^{op}\times A
+\to Set)$, che manda ogni oggetto $(A,B)$ di $A^{op} \times A$ in $Hom(A,B)$, e
+per ogni coppia di frecce (che agiscono per componenti) $(g,h):(A,B) \to
+(A',B')$ il funtore manda ogni $f$ in $Hom(A,B)$ in $hfg$ in $Hom(A',B')$.\\
+Sappiamo che da $Set^{A^{op} \times A} \to (Set^A)^{A^{op}}$ possiamo ottenere ora
+un funtore $Hom*:A^{op} \to Set^A$ e dualmente un funtore $Hom*_{A^{op}}: A \to
+Set^{A^{op}}$.
+
+\paragraph*{Yoneda Lemma:} se $A$ è localmente piccola e $F:A^{op} \to Set$
+allora $Nat(h_A,F)$ è in corrispondenza biunivoca con $F(A)$.\\
+Idea: per ogni $a \in F(A)$ otteniamo una trasformazione naturale
+$\check{a}:h_A \to F$ stipulando che $\check{a}(B):Hom(B,A)\to F(B)$ manda $g:B
+\to A$ in $F(g(a))$. (ricorda che $F$ è controvariante). Viceversa, ad ogni
+trasformazione naturale $t:h_A \to F$ associamo un elemento $t(A)(1_A)\in F(A)$.
+
+\paragraph*{Funtori full e faithful} Un funtore $H_a \to B$ è {\it fedele} se mappa
+le frecce di $A$ in modo iniettivo in $B$, e {\it full} se lo fa in modo
+suriettivo. Un {\it full embedding} è un funtore full e faithful che è anche
+iniettivo sugli oggetti.\\
+Se $A$ è localmente piccola, il funtore di Yoneda $Hom*_{A^{op}}:A \to
+Set^{A^{op}}$ è un full embedding.
+
+\subsection{Funtori aggiunti}\label{aggiunti}
+
+Dato un funtore $F$ tra preordini $A$ e $F$ visti come categorie, un funtore
+$G:B \to A$ è {\it aggiunto destro} di $F$ se per ogni $a \in A$, $b \in B$:
+\[F(a)\leq b \mbox{ iff } a \leq G(b)\]
+e la coppia $(F,G)$ è detta una {\it connessione di Galois} covariante.\\
+Si nota che $GF:A\to A$ è un {\it operatore di chiusura} su $A$, infatti:
+\begin{description}
+\item[inflazionario:] $a\leq GF(a)$
+\item[idempotente:] $GFGF(a) \leq GF(a)$
+\item[monotòno:] se $a\leq a'$ allora $GF(a) \leq GF(a')$
+\end{description}
+mentre $FG:B \to B$ è un'operazione {\it di interno}, o di {\it co-chiusura},
+o di {\it kernel}, ossia tale che $FG(x) \leq x$ per ogni $x$.\\
+In un preordine $a \cong a'$ significa $a \leq a'$ e $a' \leq a$. Ne segue che
+$GFGF(a) \cong GF(a)$ e dualmente $FGFG(b) \cong FG(b)$ (idempotenza a meno
+di isomorfismi).\\
+$F$ e $G$ instaurano una corrispondenza uno-a-uno tra classi di equivalenza
+di elementi $a$ di $A$ ``chiusi'', ossia tali che $GF(a) \cong a$ e classi
+di equivalenza di elementi $b$ di $B$ ``aperti'', ossia tali che $FG(b)\cong
+b$. Ossia $F$ e $G$ stabiliscono un'equivalenza tra il preordine $A_0$ di
+elementi chiusi di $A$ e il preordine $B_0$ di elementi aperti di $B$. Questa
+situazione può essere descritta come un' ``unità degli opposti''.
+\begin{diagram}
+A & \pile{\lTo^F \\ \rTo_G}& B \\
+\uTo  &         &\uTo \\
+A_0 &   \lCorresponds_{\mbox{equivalence}}      &  B_0\\
+\end{diagram}
+Un caso particolare si ha considerando relazioni binarie $R \subseteq X \times
+Y$. Consideriamo $A=(\mathbb{P}(X),\subseteq)$ e $B=(\mathbb{P}(Y),\supseteq)$.
+Siano:
+\begin{itemize}
+\item $F(A)=\set{y \in Y}{\forall x \in A.(x,y) \in R}$
+\item $G(B)=\set{x \in X}{\forall y \in B.(x,y)\in R}$
+\end{itemize}
+per ogni $A \subseteq X$ e $B \subseteq Y$. Questa situazione è detta una {\it
+polarità}, un isomorfismo tra il reticolo $A_0$ dei sottoinsiemi chiusi di $X$ e
+il reticolo dei sottoinsiemi chiusi di $Y$.
+
+L'usuale definizione di aggiunzione si ha generalizzando il discorso da
+preordini a categorie. La notazione per gli aggiunti è di solito non $F$ e $G$
+ma $F$ (per ``free'') e $U$ (per ``underlying'').\\
+Un'aggiunzione $(F,G, \nu, \epsilon)$ tra categorie $A$ e $B$ localmente piccole
+è data da un isomorfismo naturale $Hom_B(F(-),-) \cong Hom_A(-,U(-))$ tra
+funtori $A^{op} \times B \to Set$. Un'aggiunzione tra categorie è inoltre una
+{\it equivalenza} se $\nu$ e $\epsilon$ sono isomorfismi naturali (ossia $UF
+\cong 1_A$ e $FU \cong 1_B$).
+
+Una dualità tra categorie $A$ e $B$ è quindi una equivalenza tra $A$ e $B^{op}$.
+
+
+\subsection{Il prodotto}
+
+Il prodotto categoriale è costituito da un oggetto $Z$ e da due frecce
+$\pi_1$ e $\pi_2$ in oggetti $X$ e $Y$ tali che se c'è un altro
+oggetto $W$ con frecce in $X$ e $Y$, c'è un'unica freccia $h$ tale che
+il diagramma commuta:
+\begin{diagram}
+ & & W & & \\
+ & \ldTo^f & \dTo[dotted]^h & \rdTo^g &\\
+X & \lTo^{\pi_1} & Z & \rTo^{\pi_2} & Y\\
+\end{diagram}
+La proprietà definitoria stabilisce una biezione tra coppie di frecce $(C \to
+A, C \to B)$ e frecce $C \to A \times B$.\\
+Nota: il prodotto vuoto coincide con l'oggetto terminale.
+
+\subsection{Il coprodotto}
+
+Il coprodotto è il duale del prodotto.
+\begin{diagram}
+X & \rTo^{inl} & Z & \lTo^{inr} & Y\\
+ & \rdTo^f & \dTo[dotted]^h & \ldTo^g &\\
+ & & W & & \\
+\end{diagram}
+
+\subsection{Oggetto terminale}
+
+Un oggetto $T$ in una categoria {\bf C} è {\it terminale} se per ogni oggetto
+$X \in C_0$ c'è un'unica freccia (denotata $\bigcirc_X:X \to T$) verso $T$:
+\begin{diagram}
+X &\rTo{!}[dotted]& T\\
+\end{diagram}
+Nota: dire che una categoria $A$ ha oggetto terminale $\mathfrak{1}$ (risp.
+iniziale) equivale a dire che il funtore $\bigcirc_A:A \to \mathfrak{1}$ ha
+aggiunto destro (risp. sinistro).
+
+\subsection{Oggetto iniziale}
+
+\`E il duale del terminale.
+\begin{diagram}
+\bot &\rTo{!}[dotted]& X\\
+\end{diagram}
+
+\subsection{Equalizer}
+
+Data una coppia di frecce parallele $f$ e $g$ da $X$ in $Y$ un loro {\it
+equalizer} è una freccia $e$ tale che $f \circ e = g \circ e$ e universale
+rispetto a questa proprietà.
+\begin{diagram}
+E & \rTo^e & X & \pile{\rTo^f \\  \rTo_g} &Y\\
+\uTo[dotted]^k & \ruTo^h & & & \\
+W & & & & \\
+\end{diagram}
+In $\mathbb{S}et$, $E=\set{a \in A}{f(a)=g(a)}$, e $e=\subseteq$.
+
+\subsection{Monics e epics}
+
+Una mappa $f:X \to Y$ è un {\it monomorfismo} (o {\it monic}) se, quando:
+\begin{diagram}
+Z & \pile{\rTo^g \\ \rTo_h} & X & \rTo^f &Y \\
+\end{diagram}
+commuta, allora
+\begin{diagram}
+Z & \pile{\rTo^g \\ \rTo_h} & X \\
+\end{diagram}
+commuta. In altre parole, la condizione è:
+\[\mbox{se } fg=fh \mbox{ allora } g=h\]
+e scriviamo $X \stackrel{f}{\rightarrowtail} Y$.\\
+Il concetto duale è l'{\it epimorfismo} (o {\it epic}), scritto $X \stackrel{f}{\twoheadrightarrow} Y$.
+\begin{flushleft}
+{\it Teorema}:
+\begin{itemize}
+\item Ogni equalizer è monic.
+\item Se $X \stackrel{f}{\to} Y$ ha un'inversa sinistra $g$, allora $f$ è un equalizer.
+\end{itemize}
+\end{flushleft}
+
+\subsection{Pullback}
+Un {\it pullback}, o prodotto fibrato, di una coppia di frecce con codominio
+$Z$ è un oggetto $X \times_Z Y$ tale che il diagramma commuta:
+\begin{diagram}
+U&                                       &                   &        &        \\
+ & \rdTo[dotted]~{(x,y)}\rdTo(4,2)^x\rdTo(2,4)_y &                   &        &        \\
+ &                                       & X\times_Z\SEpbk Y & \rTo_{f'}  &   X    \\
+ &                                       &      \dTo_{g'}       &        & \dTo_g \\
+ &                                       &         Y         & \rTo^f &   Z    \\
+\end{diagram}
+
+\begin{flushleft}
+Quando $Z$ è l'oggetto terminale, il pullback diventa un prodotto.\\
+{\bf Teorema}: se {\bf C} è una categoria con un terminale {\bf 1} allora
+{\bf C} ha pullbacks (per ogni coppia di mappe convergenti) sse ha prodotti (per
+ogni coppia di oggetti) e equalizers (per ogni coppia di morfismi paralleli).
+\end{flushleft}
+
+\subsection{Limiti}
+
+Data una categoria $I$ (la categoria {\it indice}), una categoria $A$ e un
+funtore $\Gamma:I \to A$ (un $I$-diagramma), un {\it limite} di $\Gamma$ è dato
+da un oggetto terminale nella categoria delle coppie $(A,t)$ con $a$ oggetto di
+$A$ e $t:K(a) \to \Gamma$ trasformazione naturale, dove $K(a):I \to A$ è il
+funtore con valore costante $a$. I limiti sono pullback, e possono essere
+costruiti da prodotti ed equalizer. Casi speciali di limiti sono i terminali,
+i prodotti, gli equalizers, i pullbacks.\\
+Se $I$ è un poset i limiti sono detti {\it proiettivi} (o {\it inversi}), mentre
+i colimiti sono detti {\it induttivi} (o {\it diretti}). Il limite di $\Gamma$
+si denota spesso con $\lim_{\gets} \Gamma$ e il colimite con $\lim_{\to} \Gamma$.
+
+{\bf Th:} se $F:A \to B$ ha aggiunto destro $U:B \to A$, allora $U$ preserva i
+limiti e $F$ i colimiti.
+
+Un funtore che preserva limiti finiti è detto {\it left exact}, uno che preserva
+colimiti finiti è detto {\it right exact}.
+
+\subsection{Monadi (o triple)}
+
+La nozione di {\it monade} è la generalizzazione categoriale del concetto di
+chiusura per un preordine (vedi sez. \ref{aggiunti}).
+
+Una {\it monade} $(T,\eta, \mu)$ su una categoria $A$ consiste di un funtore
+$T:A \to A$ e trasformazioni naturali $\nu:1_A \to T$ e $\mu:T^2 \to T$ tali
+che:
+\begin{itemize}
+\item $\mu \circ T \nu = 1_T = \mu \circ \nu T$ (unità)
+\item $\mu \circ \mu T = \mu \circ T \mu$ (associativa)
+\end{itemize}
+Esempio: si consideri come monade $T$ il funtore powerset (covariante) che a
+ogni oggetto $a$ in $A$ associa $\mathbb{P}(a)=\set{X}{X \subseteq a}$ e a ogni
+freccia $f:a \to b$ e ogni $X \subseteq a$ associa $\mathbb{P}(f)(X)=
+\set{f(x)}{x \in X}$. $\nu$ e $\mu$ saranno i mappings $\nu(a):a \to
+\mathbb{P}(a)$ e $\mu(a): \mathbb{P}(\mathbb{P}(a)) \to \mathbb{P}(a)$ definite
+da (per ogni insieme $a$, ogni elemento $a' \in A$ e insieme $\chi$ di
+sottoinsiemi di $a$):
+\begin{itemize}
+\item $\nu(a)(a') \equiv \{a'\}$
+\item $\mu(a)(\chi) \equiv \bigcup \chi \equiv \bigcup_{X \in \chi} X$
+\end{itemize}
+
+Th: se $F:A \to B$ ha aggiunto destro $U:B \to A$ con aggiunzioni $\nu:1_A \to
+UF$ e $\epsilon: FU \to 1_B$ allora $(UF, \nu, U \epsilon F)$ è una monade su
+$A$. Anche l'inverso è vero: ogni monade si genera da un'aggiunzione. Vediamo
+come.
+
+\subsection{Categorie Eilenberg-Moore}
+
+Data una monade $(T, \mu, \nu)$ su una categoria $\mathscr{A}$, la sua
+categoria di Eilenberg-Moore $\mathscr{A}^T$ è definita come segue:
+\begin{itemize}
+\item i suoi oggetti sono {\it algebre}, ossia coppie $(A, \phi)$ dove
+$\phi:T(A) \to A$ è una freccia di $\mathscr{A}$ tale che $\phi \nu(A)=1_A$
+e $\phi\mu(A)=\phi T(\phi)$ per ogni oggetto $A$ di $\mathscr{A}$;
+\item le sue frecce sono {\it omomorfismi}, ossia frecce $\alpha: (A,\phi)
+\mapsto (A', \phi')$ di $\mathscr{A}$ tali che $\phi' T(\alpha)=\alpha \phi$
+\end{itemize}
+Esempio: le algebre della monade powerset di $\mathbb{S}et$ sono reticoli
+inf-completi e gli omomorfismi sono mappings che preservano gli inf.
+
+Molte categorie di interesse si possono quindi vedere come categorie
+Eilenberg-Moore di monadi su categorie familiari.
+
+\subsection{Kleisli categories}
+
+Data una monade $(T, \nu , \mu)$ su una categoria $\mathscr{A}$, la sua
+categoria di Kleisli $\mathscr{A}_T$ è definita come segue:
+\begin{itemize}
+\item i suoi oggetti sono gli oggetti di $\mathscr{A}$
+\item le sue frecce sono, per ogni freccia $A \to A'$ di $\mathscr{A}$,
+frecce $A \to T(A')$ 
+\end{itemize}
+La composizione di due frecce $f:A \to T(A')$ e $g:A' \to T(A'')$ è:
+\[g \divideontimes f \equiv \mu(a'')T(g)f\]
+L'identità è data da $\nu(A):A \to T(A)$.
+
+Esempio: la categoria Kleisli della monade powerset ha come frecce le frecce
+$A \to \mathbb{P}(B)$, che sono relazioni $R \subseteq A \times B$.
+
+\subsection{CCCs}
+
+Una {\it cartesian closed category} $\mathscr{C}$ è una categoria con prodotti
+finiti (e quindi oggetto terminale) tali che per ogni oggetto $B$, il funtore
+$(-) \times B:\mathscr{C} \to \mathscr{C}$ ha aggiunto destro
+$(-)^B:\mathscr{C} \to \mathscr{C}$.\\
+Nota:
+\begin{itemize}
+\item per ogni categoria piccola $C$, la categoria funtore $\mathbb{S}et^C$
+è cartesiana chiusa
+\item $\mathbb{C}at$ è cartesiana chiusa
+\item le algebre di Heyting, viste come categorie, sono (bi)cartesiane chiuse
+(ossia chiuse anche per coprodotti)
+\end{itemize}
+La categoria del $\lambda$-calcolo tipato con {\it surjective pairing} è
+equivalente alla categoria delle CCC. L'equivalenza rimane aggiungendo a
+entrambi i frameworks un oggetto dei numeri naturali.
+
+Questo risultato è dovuto alla completezza funzionale delle CCC, e questa
+è relata al teorema di deduzione del calcolo proposizionale intuizionista,
+o meglio, a un'istanza della transitività:
+\[\infer{T \vdash B}{T \vdash A & A \vdash B}\]
+
+Le \emph{cartesian closed categories} {\bf degenerate} sono quelle che non
+distinguono i morfismi (sono preordini). La logica classica è degenerata.
+Una logica, vista come categoria, è classica quando è equivalente alla sua
+opposta.
+
+\subsection{Sezioni e ritrazioni}
+
+%\begin{center}
+%\begin{figure}
+%\includegraphics[scale=.12]{sections}
+%\caption{ Da Lawvere}
+%\end{figure}
+%\end{center}
+
+Problemi di divisione per mappe:
+\begin{itemize}
+\item {\it determinazione} (o ``estensione''): date $f$ e $h$ con stesso
+dominio, trovare le $g$ tali che $h=g \circ f$:
+\begin{diagram}
+\ & & B & & \\
+\ &\ruTo^f & &\rdTo^{g?}[dotted] & \\
+A &  &\rTo^h & &C
+\end{diagram}
+Si dice che $g$ è una determinazione di $h$ attraverso $f$, o che $h$ dipende
+solo da $f$, o che $h$ è funzione di $f$.
+\item {\it scelta} (o lifting): date $g$ e $h$ con stesso codominio, trovare
+le $f$ tali che $h=g \circ f$:
+\begin{diagram}
+\ & & B & & \\
+\ &\ruTo^{f?}[dotted] & &\rdTo^{g} & \\
+A &  &\rTo^h & &C
+\end{diagram}
+\end{itemize}
+Se $h$ è l'identità, determinazione e scelta diventano {\it retrazione} e {\it
+sezione}.\\
+Se $A \stackrel{f}{\to} B$:
+\begin{itemize}
+\item una {\it retrazione} per $f$ è una mappa $B \stackrel{r}{\to} A$ tale che
+$r \circ f=1_A$
+\item una {\it sezione} per $f$ è una mappa $B \stackrel{s}{\to} A$ tale che
+$f \circ s =1_B$
+\end{itemize}
+
+\subsection{Sotto-oggetti}
+
+Un'{\it inclusione}, o {\it mono}, in una categoria è una mappa $S
+\stackrel{i}{\to}X$, tale che per ogni oggetto $T$ e ogni coppia di mappe
+$s_1,s_2$ da $T$ a $S$:
+\[i(s_1)=i(s_2) \mbox{ implica } s_1=s_2\]
+Denotiamo un mono $i$ da $A$ a $B$ con $A \stackrel{i}{\hookrightarrow} B$.
+
+Con l'inclusione abbiamo la nozione di {\it parte} $S$ di un insieme $X$,
+$S \hookrightarrow X$. Data una parte $S \stackrel{i}{\hookrightarrow}X$,
+la sua mappa corrispondente $X \stackrel{\phi_S}{\to} {\bf 2}$ è detta {\it
+mappa caratteristica} di $S,i$, perché caratterizza gli elementi di $S$ come
+gli elementi $x$ tali che $\phi_S(x)=true$.
+
+\subsection{Classificatore di sotto-oggetti}
+
+Un {\it classificatore di sotto-oggetti} consiste di un oggetto $\Omega$ e una freccia
+${\tt true}:~1 \rightarrowtail \Omega$ tali che per ogni mono $m:Y \rightarrowtail X$
+c'è un'unica mappa $ch(m):X \to \Omega$ (la funzione caratteristica del sotto-oggetto
+$Y$) che produce un pullback:
+
+\newarrow{Mono}{vee}--->
+\begin{diagram}
+Y \SEpbk & \rTo &   1    \\
+\dMono^m       &        & \dTo_{\tt true} \\
+X         & \rTo^{ch(m)} &   \Omega    \\
+\end{diagram}
+
+In $\mathbb{S}et$ $ch(m)$ è la funzione caratteristica di $m$.
+
+\subsection{Topos}
+
+Una categoria {\bf E} è un {\it topos} se:
+\begin{itemize}
+\item ha limiti finiti
+\item è cartesiana chiusa
+\item ha classificatore di sotto-oggetti
+\end{itemize} 
+
+\section{Tipi}
+
+\subsection{Setoidi}
+
+Un {\it setoide} $X=(\underline{X},=_X)$ è un {\it tipo} $\underline{X}$ con
+una relazione di equivalenza $=_X$ su $X$\footnote{ I setoidi sono anche
+chiamati $E-sets$ dai categoristi, {\it extensional sets} da Martin-L\"{o}f,
+e {\it sets} da Bishop, che chiama {\it presets} gli $\underline{X}$.}.
+\[x \in X \triangleq x:\underline{X}\]
+
+\subsection{Funzioni}
+Una {\it funzione} $f$ tra insiemi $X$ e $Y$ è una coppia $(\underline{f},
+ext_f)$ con $\underline{f}:\underline{X} \to \underline{Y}$ è un'operazione
+t.c.:
+\[(ext_f a b p):\underline{f}a=_Y \underline{f}b (a,b:\underline{X}, p:a =_X
+b)\]
+Definiamo $f(a)\triangleq \underline{f}a$.\\
+Una mappa tra setoidi $A=(\underline{A},=_A)$ e $B=(\underline{B},=_B)$ è una
+funzione $f:\underline{A} \to \underline{B}$ tale che sia estensionale, ossia:
+\[a_1 =_A a_2 \Rightarrow f(a_1)=_B f(a_2)\]
+Otteniamo una categoria dicendo che $f,g: (\underline{A},=_A) \to
+(\underline{B},=_B)$ sono uguali sse $\Pi a:A. f(a)=_B g(a)$.\\
+{\bf Nota}:
+\begin{itemize}
+\item $f$ è mono sse $f(a_1)=_B f(a_2) \Rightarrow a_1=_A a_2$
+\item $f$ è epi sse $\Pi b:B.\Sigma a:A.b=_B f(a)$
+\end{itemize}
+Le funzioni da $A$ in $B$ formano un insieme $B^A$ definito dal tipo:
+\[\Sigma f:\underline{A} \to \underline{B}.\forall x,y:\underline{A}.(x=_Ay \Rightarrow f(x)=_B f(y))\]
+con la relazione di equivalenza:
+\[(f,p) =_{B^A} (g,q) \triangleq \forall x:\underline{A}.f(x)=_B g(x)\]
+La valutazione $ev_{A,B}:B^A \times A \to B$:
+\[ev_{A,B}((f,p),a)=f(a)\]
+
+\subsection{Setoidi discreti}
+
+Un setoide $X$ è detto {\it discreto} se, per ogni $x,y \in X$:
+\[(x =_X y) \vee \neg(x =_X y)\]
+In teoria degli insiemi classica tutti gli insiemi sono discreti, mentre nelle
+teorie costruttive non è così. Ma ${\bf 1}$ e l'insieme dei numeri naturali
+$\mathbb{N}$ sono discreti, e il prodotto e il coprodotto mantengono la
+proprietà di discretezza degli insiemi.
+
+\subsection{Predicati}
+
+Una {\it proprietà estensionale}, o {\it predicato}, $P$ su un setoide $X$ è
+una famiglia di proposizioni $P(x) (x \in X)$ con:
+\[x =_X y , P(x) \Rightarrow P(y)\]
+Una {\it relazione} $R$ tra insiemi $X$ e $Y$ è una famiglia di proposizioni
+$R(x,y) (x \in X,y \in Y)$ con:
+\[x=_X x', y=_Y y', R(x,y) \Rightarrow R(x',y')\]
+
+\subsection{Equivalenze}
+
+Una relazione di equivalenza $\sim$ è {\it più fine} di una r.d.e. $\approx$ su
+un tipo $\underline{A}$ se per ogni $x,y:A$:
+\[x \sim y \Rightarrow x \approx y\]
+Se esiste la più fine r.d.e. $=_A$ su un tipo $\underline{A}$, il setoide
+$A=(\underline{A},=_A)$ ha la {\it proprietà di sostituzione} (per ogni
+predicato $P$ sul tipo $\underline{A}$):
+\[x =_A y \Rightarrow (P(x) \iff P(y))\]
+
+Raramente i setoidi sono sostitutivi, e la nozione non si conserva tra
+isomorfismi. Si può però costruire un setoide sostitutivo $A$ per ogni tipo
+$\underline{A}$ grazie alla costruzione identità $Id(\underline{A})$.
+
+\section{Calcoli}
+
+\subsection{Hilbert}
+
+\begin{itemize}
+\item 3 assiomi
+  \begin{description}
+  \item[(A1)] $A \to (B \to A)$
+  \item[(A2)] $(A \to (B \to C)) \to ((A \to B) \to (A \to C))$
+  \item[(A3)] $(\neg A \to \neg B) \to (B \to A)$
+  \end{description}
+\item 1 regola
+  \begin{description}
+  \item $\infer[(mp)]{B}{A & A \to B}$   
+  \end{description}
+\end{itemize}
+L'estensione al primo ordine si ha aggiungendo:
+\begin{itemize}
+\item 2 assiomi
+  \begin{description}
+  \item[(A4)] $\forall x.(A(x) \to A[x/t])$
+  \item[(A5)] $A(t) \to \exists x.A(x)$
+  \end{description}
+\item 2 regole
+ \begin{description}
+  \item $\infer[(\forall r)]{X \to \forall x(A(x))}{X \to A(t)}$
+    \item $\infer[(\exists l)]{\exists x (A(x)) \to X}{A(t) \to X}$
+  \end{description}
+\end{itemize}
+con $t$ non libero in X né in A(x).
+
+\subsection{Deduzione naturale intuizionista}
+
+
+Vedi figura \ref{natded}.
+\begin{table}[h!]
+\begin{center}
+\includegraphics[scale=.4]{natded}
+\end{center}
+\caption{Deduzione naturale senza regole classiche.}
+\label{natded}
+\end{table}
+Vedi figura \ref{natdedclassic}
+\begin{table}[h!]
+\begin{center}
+\includegraphics[scale=.4]{natdedclassic}
+\end{center}
+\caption{Deduzione naturale classica.}
+\label{natdedclassic}
+\end{table}
+
+\subsection{Gentzen intuizionista}
+
+Vedi figura \ref{int}. $x$ non deve comparire nella seconda regola del $\forall$
+e nella prima del $\exists$.
+\begin{table}[h!]
+\begin{center}
+\includegraphics[scale=.6]{int}
+\end{center}
+\caption{Il calcolo dei sequenti intuizionista}
+\label{int}
+\end{table}
+
+
+\section{Metateoria}
+
+\paragraph*{Assiomatizzabilità}
+
+Una teoria elementare $T$ è assiomatizzata sse l'insieme dei suoi assiomi è
+decidibile (ad esempio quando è finito, in tal caso $T$ è {\it finitamente
+assiomatizzata}.
+
+Una teoria $T$ è assiomatizzabile sse esiste una teoria elementare
+assiomatizzata ad essa equivalente\footnote{ Due teorie sono equivalenti se
+hanno stesso linguaggio e stesso insieme di teoremi. Possono differire per gli
+assiomi.}.
+
+Una teoria $T$ è {\it finitamente assiomatizzabile} se esiste una teoria
+equivalente che sia finitamente assiomatizzata.
+
+\paragraph*{Coerenza}
+
+Una teoria elementare $T$ è contraddittoria sse esiste una fbf chiusa A del
+suo linguaggio tale che $T \vdash A$ e $T \vdash \neg A$.
+
+\paragraph*{Completezza sintattica}
+
+Una teoria elementare $T$ è sintatticamente completa sse, data una fbf chiusa
+$A$ del suo linguaggio, o $T \vdash A$ o $T \vdash \neg A$\footnote{
+Ci aspetteremmo di saper decidere, data una teoria $T$ e una formula $A$,
+se $T \vdash A$ o $T \vdash \neg A$. Ciò non è vero in generale. Infatti, per
+il primo teorema di incompletezza (sintattica) di G\"{o}del: per una teoria $T$
+coerente e in grado di esprimere l'aritmetica ricorsiva, esiste una formula
+$A$ tale che $T \not \vdash A$ e $T \not \vdash \neg A$.\\
+Prendendo come $T$ l'aritmetica di Robinson si mostra immediatamente che
+il calcolo del primo ordine è indecidibile (già limitandosi a un alfabeto
+limitato).}.\\
+Per il lemma di Lindembaum ogni teoria coerente ha un'estensione coerente e
+sintatticamente completa; tuttavia tale estensione può non essere
+assiomatizzata o assiomatizzabile.
+
+Una teoria si dice {\it essenzialmente incompleta} sse ogni sua soprateoria
+coerente e assiomatizzabile è sintatticamente incompleta.\\
+{\bf Nota}:\\
+Data una formula atomica $A$ in logica proposizionale si ha che $\{\} \not\vdash A$ e $\{\} \not \vdash \neg A$. Tuttavia $\{A,B\}\vdash A$. L'aritmetica
+formalizzata al primo ordine è invece {\it essenzialmente} incompleta
+(primo teorema di incompletezza).
+
+\paragraph*{Decidibilità}
+
+Una teoria è decidibile sse è decidibile l'insieme dei suoi teoremi.\\
+Ogni teoria non assiomatizzabile è indecidibile.\\
+Dal fatto che il teorema di Church vale già usando l'alfabeto dell'aritmetica
+di Robinson, si ha che l'aritmetica ricorsiva è indecidibile.\\
+Una teoria indecidibile può avere estensioni che sono decidibili (ossia: non
+tutte le teorie indecidibili lo sono essenzialmente).\\
+Ci sono teorie elementari decidibili: le teorie degli ordinamenti totali e
+densi, dell'identità, dell'aritmetica additiva, dei gruppi abeliani.
+
+Teorema: se una teoria elementare coerente è assiomatizzata e sintatticamente
+completa allora è decidibile.
+
+\paragraph*{Completezza semantica}
+
+Teorema: ogni teoria elementare è semanticamente completa, nel senso che ogni
+fbf chiusa $A$ vera in tutti i modelli della teoria è teorema della teoria.
+
+\paragraph*{Compattezza}
+
+Due formulazioni equivalenti (data teoria $T$ e suo linguaggio $L_T$):
+\begin{enumerate}
+\item Una fbf chiusa $A$ di $L_T$ è conseguenza logica di $T$ (degli assiomi di
+$T$) sse è già conseguenza logica di un insieme finito di assiomi di
+$T$\footnote{ Ossia sse è conseguenza logica di una teoria finitamente
+assiomatizzata di $T$.}.
+\item Una teoria elementare ha modello sse ogni sua sottoteoria finitamente
+assiomatizzata ha modello.
+\end{enumerate}
+Dal teorema di compattezza segue:
+\begin{itemize}
+\item Teorema: non esiste alcuna fbf chiusa $A$ di $FOL_=$ valida sse il dominio
+è infinito.
+\item Teorema: non esiste alcun insieme $X$ di fbf chiuse di $FOL_=$ valido sse
+il dominio è finito\footnote{ Anche se si può esprimere che il dominio contenga
+esattamente $n$ elementi per $n$ qualunque.}.
+\end{itemize}
+
+\paragraph*{Categoricità}
+
+Una teoria elementare è categorica se tutti i suoi modelli sono isomorfi.\\
+Teorema: se una teoria elementare $T$ ha un modello di dominio infinito, non è
+categorica\footnote{ Ciò segue dai teoremi di L\"{o}wenheim-Skolem.}. Se non è
+presente l'identità, nessuna teoria elementare è categorica.
+
+\paragraph*{Incompletezza}
+
+Per il primo teorema di incompletezza di G\"{o}del, la teoria elementare $N$
+dell'aritmetica, se è coerente, è sintatticamente incompleta\footnote{ Il
+risultato vale già per l'aritmetica di Robinson.}.\\
+La proposizione di G\"{o}del è vera nel modello standard ma non dimostrabile
+(né refutabile).\\
+Il risultato sorprendente non è questo, ma il fatto che ogni soprateoria di
+teorie complete, se coerente e assiomatizzabile, è sintatticamente incompleta.\\
+Si dimostra che, se sono coerenti, sistemi come $N$ e
+l'aritmetica di Robinson sono indecidibili, e lo sono essenzialmente.\\
+Ne segue il teorema di Church per FOL\footnote{ Se il calcolo fosse decidibile
+potremmo decidere se ${\bf AR} \vdash_{FOL} A$ decidendo $\vdash_{FOL} {\bf AR}
+\to A$, il che è impossibile per quanto detto prima.}. Date correttezza e
+completezza, segue che è indecidibile il problema della validità per formule
+FOL.\\
+Se una teoria è sintatticamente completa, allora è decidibile (ma la conversa
+non vale in generale; la teoria vuota ad esempio è sintatticamente incompleta
+ma decidibile nel calcolo proposizionale).
+
+\paragraph*{Secondo ordine}
+
+Teorema: non esiste un calcolo corretto per la logica del secondo ordine che
+sia completo.\\
+Ne segue che al secondo ordine non vale il teorema di compattezza.\\
+Ne segue che al secondo ordine non vale il teorema di L\"{o}wenheim-Skolem.
+
+Al secondo ordine è definibile l'identità, quindi tutte le teorie formulate
+al secondo ordine (come $N^2$) sono dotate di identità.
+
+Teorema (Dedekind): $N^2$ è categorica.\\
+Dato che $N^2$ è categorica, essa possiede una proprietà di completezza
+semantica: data una proposizione $A$, o $A$ o $\neg A$ è vera nel modello
+standard\footnote{ Che è l'unico modello, a meno di isomorfismi.}, quindi è vera
+in tutti i modelli.\\
+Tuttavia per $N^2$ vale il teorema di G\"odel, per cui se è coerente allora
+è indecidibile e sintatticamente incompleta. Combinando la completezza
+semantica con l'incompletezza sintattica si ha una (ulteriore) prova
+dell'incompletezza dei calcoli per il secondo ordine.
+
+\paragraph*{Osservazioni}
+
+Ha senso parlare di decidibilità per teorie elementari finitamente
+assiomatizzabili. L'aritmetica di Robinson {\bf AR} è finitamente
+assiomatizzabile. Per essa vale il teorema di G\"{o}del, quindi esiste una
+formula non dimostrabile né refutabile in {\bf AR}. Quindi {\bf AR} è
+indecidibile. {\bf AR} è una teoria del primo ordine, quindi ne segue che a
+maggior ragione il calcolo del primo ordine è in generale indecidibile (sono
+decidibili suoi frammenti di alfabeto limitato, ad esempio l'aritmetica
+additiva).\\
+Essendo il calcolo corretto e (semanticamente) completo, per ogni teoria
+elementare le formule valide in ogni modello sono dimostrabili.
+
+
+
+\end{document}
